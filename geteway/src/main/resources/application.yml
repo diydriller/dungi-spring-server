@@ -1,0 +1,42 @@
+server:
+  # 포트설정
+  port: 9001
+
+spring:
+  # 게이트웨이 설정
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+
+        - id: MEMO-SERVICE
+          uri: lb://MEMO-SERVICE
+          predicates:
+            - Path=/api/memo/**
+
+        - id: ROOM-SERVICE
+          uri: lb://ROOM-SERVICE
+          predicates:
+            - Path=/api/room/**
+
+        - id: TODO-SERVICE
+          uri: lb://TODO-SERVICE
+          predicates:
+            - Path=/api/todo/**
+
+# eureka client 설정
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+

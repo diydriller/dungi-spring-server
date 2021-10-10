@@ -1,0 +1,191 @@
+version: '3.7'
+
+services:
+
+  service-registry:
+    image: diydriller/dungi-service-registry:latest
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - currency-network
+
+  config:
+    image: diydriller/dungi-config:latest
+    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - currency-network
+    volumes:
+      - type: bind
+        source: D:/practice/spring/dungi/config-file/server
+        target: /usr/share/config
+    environment:
+      SPRING.PROFILES.ACTIVE: native
+      SPRING.CLOUD.CONFIG.SERVER.NATIVE.SEARCH_LOCATIONS: file:///usr/share/config
+
+  auth:
+    image: diydriller/dungi-auth:latest
+    mem_limit: 700m
+    ports:
+      - "9002:9002"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
+
+
+
+  gateway:
+    image: diydriller/dungi-geteway:latest
+    mem_limit: 700m
+    ports:
+      - "9001:9001"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+    depends_on:
+      - service-registry
+
+  memo:
+    image: diydriller/dungi-memo:latest
+    mem_limit: 700m
+    ports:
+      - "9005:9005"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
+
+  room:
+    image: diydriller/dungi-room:latest
+    mem_limit: 700m
+    ports:
+      - "9004:9004"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
+
+  todo:
+    image: diydriller/dungi-todo:latest
+    mem_limit: 700m
+    ports:
+      - "9006:9006"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
+
+  notice-vote:
+    image: diydriller/dungi-notice-vote:latest
+    mem_limit: 700m
+    ports:
+      - "9007:9007"
+    networks:
+      - currency-network
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
+
+  redis:
+    image: redis
+    mem_limit: 300m
+    ports:
+      - "6379:6379"
+    networks:
+      - currency-network
+
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.4
+    user: root
+    volumes:
+      - type: bind
+        source: D:/practice/spring/dungi/config-file/elasticsearch/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: single-node
+      ELASTIC_PASSWORD: hyun
+    networks:
+      - currency-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.7.2
+    user: root
+    volumes:
+      - type: bind
+        source: D:/practice/spring/dungi/config-file/logstash/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: D:/home/logstash
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    ports:
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - currency-network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.1.4
+    user: root
+    volumes:
+      - type: bind
+        source: D:/practice/spring/dungi/config-file/kibana/kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    ports:
+      - "5601:5601"
+    networks:
+      - currency-network
+    depends_on:
+      - elasticsearch
+
+
+volumes:
+  elasticsearch:
+networks:
+  currency-network:
+    driver: bridge

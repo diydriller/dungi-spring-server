@@ -1,0 +1,78 @@
+buildscript {
+	ext {
+		springBootVersion = '2.4.9'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+	}
+}
+
+// root 까지 관리 할 경우 사용
+allprojects {
+
+}
+
+// setting.gradle 에 include 된 module 관리
+subprojects {
+	repositories {
+		mavenCentral()
+	}
+
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	group = 'com.project'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
+
+	dependencies {
+		//lombok
+		compileOnly 'org.projectlombok:lombok:1.18.16'
+		annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+		//jwt
+		implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.0'
+	}
+
+}
+
+project(':auth') {
+	dependencies {
+		compile project(':common')
+	}
+}
+
+project(':todo') {
+	dependencies {
+		compile project(':common')
+	}
+}
+
+project(':room') {
+	dependencies {
+		compile project(':common')
+	}
+}
+
+project(':memo') {
+	dependencies {
+		compile project(':common')
+	}
+}
+
+project(':notice-vote') {
+	dependencies {
+		compile project(':common')
+	}
+}
+
+project(':chart') {
+	dependencies {
+		compile project(':common')
+	}
+}

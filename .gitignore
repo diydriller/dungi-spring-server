@@ -1,0 +1,16 @@
+### IDE
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+gradle/
+build/
+.gradle/
+gradlew
+
+### 설정파일
+*.properties
+
+
+.gitsecret/keys/random_seed
