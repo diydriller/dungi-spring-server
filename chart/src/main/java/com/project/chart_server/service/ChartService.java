@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class ChartService {
     private final RoomRepository roomRepository;
 
-    @Transactional
     void chartUpdate(){
         LocalDateTime endDate=LocalDateTime.now();
         LocalDateTime startDate=LocalDateTime.now().minusDays(7);
