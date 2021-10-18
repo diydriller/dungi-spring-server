@@ -1,9 +1,8 @@
-package com.project.auth_server.controller;
+package com.project.todo_server.controller;
 
 import com.google.gson.Gson;
-import com.project.auth_server.dto.JoinRequestDto;
-import com.project.auth_server.dto.LoginRequestDto;
-import com.project.auth_server.service.AuthService;
+import com.project.todo_server.dto.CreateTodayTodoRequestDto;
+import com.project.todo_server.service.TodoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,41 +10,43 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class AuthControllerTest {
+class TodoControllerTest {
+
 
     @InjectMocks
-    private AuthController authController;
+    private TodoController todoController;
 
     @Mock
-    private AuthService authService;
+    private TodoService todoService;
 
     private MockMvc mockMvc;
 
 
     @BeforeEach
     public void init(){
-        mockMvc= MockMvcBuilders.standaloneSetup(authController).build();
+        mockMvc= MockMvcBuilders.standaloneSetup(todoController).build();
     }
 
     @Test
-    void loginTest() throws Exception {
-        LoginRequestDto requestDto=new LoginRequestDto("aaa@naver.com","aaa");
+    void createTodoTest() throws Exception {
+
+        CreateTodayTodoRequestDto requestDto=new CreateTodayTodoRequestDto("test","2021/11/11/10/30");
 
         final ResultActions resultActions=mockMvc.perform(
-                MockMvcRequestBuilders.post("/login")
+                MockMvcRequestBuilders.post("/room/2/todo/day")
+                        .header("access_token","aaa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto))
+
         );
 
         resultActions.andExpect(status().isOk()).andReturn();

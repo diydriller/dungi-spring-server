@@ -1,12 +1,11 @@
 package com.project.notice_vote_server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.common.dto.GetNoticeVoteDto;
 import com.project.common.error.BaseException;
 import com.project.common.model.*;
 import com.project.common.repository.MemoRepository;
-import com.project.common.repository.NoticeVoteRepository;
+import com.project.notice_vote_server.repository.NoticeVoteRepository;
 import com.project.common.repository.RoomRepository;
 import com.project.common.service.RedisService;
 import com.project.notice_vote_server.dto.CreateNoticeRequestDto;
@@ -16,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

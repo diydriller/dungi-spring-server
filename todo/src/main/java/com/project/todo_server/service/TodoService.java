@@ -1,11 +1,10 @@
 package com.project.todo_server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.common.error.BaseException;
 import com.project.common.model.*;
 import com.project.common.repository.RoomRepository;
-import com.project.common.repository.TodoRepository;
+import com.project.todo_server.repository.TodoRepository;
 import com.project.common.service.RedisService;
 import com.project.todo_server.dto.CreateRepeatTodoRequestDto;
 import com.project.todo_server.dto.CreateTodayTodoRequestDto;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package com.project.common.repository;
+package com.project.notice_vote_server.repository;
 
 import com.project.common.dto.GetNoticeVoteDto;
 import com.project.common.model.DeleteStatus;

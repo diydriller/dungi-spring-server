@@ -1,23 +1,17 @@
 package com.project.memo_server.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.common.error.BaseException;
 import com.project.common.model.DeleteStatus;
 import com.project.common.model.Memo;
 import com.project.common.model.Room;
 import com.project.common.model.User;
-import com.project.common.repository.MemoRepository;
+import com.project.memo_server.repository.MemoRepository;
 import com.project.common.repository.RoomRepository;
-import com.project.common.repository.UserRepository;
-import com.project.common.service.JwtService;
 import com.project.common.service.RedisService;
 import com.project.memo_server.dto.CreateMemoRequestDto;
 import com.project.memo_server.dto.GetMemoResponseDto;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

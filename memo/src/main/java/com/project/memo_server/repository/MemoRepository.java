@@ -1,4 +1,4 @@
-package com.project.common.repository;
+package com.project.memo_server.repository;
 
 
 import com.project.common.model.DeleteStatus;

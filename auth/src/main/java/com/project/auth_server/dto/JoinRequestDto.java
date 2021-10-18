@@ -1,10 +1,14 @@
 package com.project.auth_server.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class JoinRequestDto {
 
     @NotEmpty(message = "email is empty")

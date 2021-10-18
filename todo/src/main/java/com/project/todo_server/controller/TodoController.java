@@ -24,7 +24,6 @@ import static com.project.common.response.BaseResponseStatus.SUCCESS;
 public class TodoController {
 
     private final TodoService todoService;
-    private final RedisService redisService;
     private final JwtService jwtService;
 
     // 하루 할일 생성

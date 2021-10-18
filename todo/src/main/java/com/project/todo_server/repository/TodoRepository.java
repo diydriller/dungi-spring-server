@@ -1,4 +1,4 @@
-package com.project.common.repository;
+package com.project.todo_server.repository;
 
 import com.project.common.model.*;
 import org.springframework.data.domain.Page;

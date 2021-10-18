@@ -26,3 +26,7 @@ dependencyManagement {
 bootBuildImage{
     imageName="diydriller/"+rootProject.name+'-'+project.name
 }
+
+test {
+    useJUnitPlatform()
+}

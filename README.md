@@ -7,6 +7,7 @@
 * 설정정보 파일은 git secret을 사용해 암호화
 * docker compose 사용
 * elk logging 사용
+* junit , mockito를 사용해서 unit test , ngrinder를 사용해서 streess test
 ### AUTH
 * 회원가입할때 비밀번호 저장시 bcypt 사용해서 단방향 암호화
 * sms 문자인증으로 twilio 서비스 사용
