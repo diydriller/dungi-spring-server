@@ -1,4 +1,5 @@
 ## 구현사항
+[![둥지메이트](http://img.youtube.com/vi/6M-7nF22ruM/0.jpg)](https://youtu.be/6M-7nF22ruM?t=0s)
 ### COMMON
 * multi-module을 사용해서 의존성을 최소화
 * spring-cloud를  사용해서 micro service artitecture를 구현
@@ -6,6 +7,7 @@
 * configuration server 로부터 설정정보 주입
 * 설정정보 파일은 git secret을 사용해 암호화
 * docker compose 사용
+* aws 배포와 nginx reverse proxy 사용
 * elk logging 사용
 * junit , mockito를 사용해서 unit test , ngrinder를 사용해서 streess test
 ### AUTH
