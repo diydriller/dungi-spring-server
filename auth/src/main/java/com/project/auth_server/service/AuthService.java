@@ -126,7 +126,7 @@ public class AuthService {
 
     // 로그인
     @Transactional(rollbackFor = Exception.class)
-    public String login(LoginRequestDto requestDto) throws JsonProcessingException {
+    public String login(LoginRequestDto requestDto) throws JsonProcessingException{
 
         String hashedPassword=passwordEncoder.encode(requestDto.getPassword());
 
@@ -144,9 +144,10 @@ public class AuthService {
 
     //카카오 로그인
     @Transactional(rollbackFor = Exception.class)
-    public String kakaoLogin(KakaoLoginRequestDto requestDto,KakaoInfoDto.Account account) throws JsonProcessingException {
+    public String kakaoLogin(KakaoLoginRequestDto requestDto,KakaoInfoDto.Account account)
+            throws JsonProcessingException  {
 
-        if(account.getEmail()!=requestDto.getEmail()){
+        if(!account.getEmail().equals(requestDto.getEmail())){
             throw new BaseException(KAKAO_LOGIN_FAIL);
         }
 

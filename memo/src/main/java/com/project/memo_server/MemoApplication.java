@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan(basePackages = "com.project.common")
-@EnableJpaRepositories(basePackages = "com.project.common")
+@EnableJpaRepositories(basePackages = {"com.project.common","com.project.memo_server"})
 @ComponentScan(basePackages = {"com.project.memo_server","com.project.common"})
 @EnableEurekaClient
 @EnableJpaAuditing

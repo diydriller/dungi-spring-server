@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.common.dto.GetNoticeVoteDto;
 import com.project.common.error.BaseException;
 import com.project.common.model.*;
-import com.project.common.repository.MemoRepository;
 import com.project.notice_vote_server.repository.NoticeVoteRepository;
 import com.project.common.repository.RoomRepository;
 import com.project.common.service.RedisService;

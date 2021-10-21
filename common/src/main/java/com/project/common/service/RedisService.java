@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static com.project.common.response.BaseResponseStatus.NOT_USER_LOGIN;
+import static com.project.common.response.BaseResponseStatus.*;
 
 @Service
 @AllArgsConstructor

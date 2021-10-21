@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
@@ -119,7 +120,9 @@ public class AuthController {
 
     // 로그인
     @PostMapping("login")
-    public BaseResponse<?> login(@RequestBody @Valid LoginRequestDto requestDto) throws BaseException{
+    public BaseResponse<?> login(
+            @RequestBody @Valid LoginRequestDto requestDto)
+            throws BaseException{
         try {
             return new BaseResponse(authService.login(requestDto));
         }

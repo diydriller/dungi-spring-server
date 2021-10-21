@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan(basePackages = "com.project.common")
-@EnableJpaRepositories(basePackages = "com.project.common")
+@EnableJpaRepositories(basePackages = {"com.project.common","com.project.notice_vote_server"})
 @ComponentScan(basePackages = {"com.project.notice_vote_server","com.project.common"})
 @EnableJpaAuditing
 @EnableEurekaClient
