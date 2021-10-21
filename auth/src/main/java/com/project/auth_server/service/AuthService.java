@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class AuthService {
 
     // 유저 생성
     @Transactional
-    public void createUser(JoinRequestDto requestDto) throws BaseException{
+    public void createUser(JoinRequestDto requestDto)throws IOException{
 
         String imageUploadUrl=imageUpload(requestDto.getImg());
         String hashedPassword=passwordEncoder.encode(requestDto.getPassword());
@@ -66,33 +67,28 @@ public class AuthService {
     }
 
     // 이메일 있는지 확인
-    public void checkEmailPresent(CheckEmailRequestDto emailRequestDto) throws BaseException{
-        userRepository.findByEmail(emailRequestDto.getEmail())
+    public void checkEmailPresent(String email) throws BaseException{
+        userRepository.findByEmail(email)
                 .ifPresent(m->{throw new BaseException(ALREADY_EXISTS_EMAIL);});
     }
 
 
     // sms 문자 보내기
     @Transactional(rollbackFor = Exception.class)
-    public void sendSms(SendSmsRequestDto phoneRequestDto) throws BaseException{
+    public void sendSms(SendSmsRequestDto phoneRequestDto){
 
         int randomNumber = (int) (Math.random() * 9000) + 1000;
         redisService.setStringOpsTtl(phoneRequestDto.getPhoneNumber()
                 ,String.valueOf(randomNumber), 90, TimeUnit.SECONDS);
 
-        try {
-            String trimedPhoneNumber = trimPhonNumber(phoneRequestDto.getPhoneNumber());
+        String trimedPhoneNumber = trimPhonNumber(phoneRequestDto.getPhoneNumber());
 
-            Twilio.init(twilioAccountSid, twilioAuthToken);
-            Message.creator(
-                    new PhoneNumber(trimedPhoneNumber),
-                    new PhoneNumber(adminPhoneNumber),
-                    "enter the number : "+randomNumber)
-                    .create();
-        }
-        catch (BaseException e){
-            throw new BaseException(SMS_SEND_ERROR);
-        }
+        Twilio.init(twilioAccountSid, twilioAuthToken);
+        Message.creator(
+                new PhoneNumber(trimedPhoneNumber),
+                new PhoneNumber(adminPhoneNumber),
+                "enter the number : "+randomNumber)
+                .create();
     }
 
 
@@ -111,7 +107,7 @@ public class AuthService {
 
     // 카카오 회원가입
     @Transactional
-    public void createKakaoUser(KakaoJoinRequestDto joinRequestDto) throws BaseException{
+    public void createKakaoUser(KakaoJoinRequestDto joinRequestDto) throws IOException{
         String imageUploadUrl;
         if(joinRequestDto.getKakoImg()==null){
             imageUploadUrl=imageUpload(joinRequestDto.getProfileImg());
@@ -126,7 +122,7 @@ public class AuthService {
 
     // 로그인
     @Transactional(rollbackFor = Exception.class)
-    public String login(LoginRequestDto requestDto) throws JsonProcessingException{
+    public String login(LoginRequestDto requestDto) throws IOException,BaseException{
 
         String hashedPassword=passwordEncoder.encode(requestDto.getPassword());
 
@@ -136,16 +132,14 @@ public class AuthService {
         if(passwordEncoder.matches(user.getPassword(),hashedPassword)){
             throw new BaseException(PASSWORD_NOT_EQUAL);
         }
-
         redisService.saveUser(user);
-
         return jwtService.getToken(user);
     }
 
     //카카오 로그인
     @Transactional(rollbackFor = Exception.class)
     public String kakaoLogin(KakaoLoginRequestDto requestDto,KakaoInfoDto.Account account)
-            throws JsonProcessingException  {
+            throws IOException,BaseException {
 
         if(!account.getEmail().equals(requestDto.getEmail())){
             throw new BaseException(KAKAO_LOGIN_FAIL);
@@ -167,8 +161,7 @@ public class AuthService {
     }
 
     // 이미지 업로드 함수
-    String imageUpload(MultipartFile imageFile) throws BaseException{
-        try {
+    String imageUpload(MultipartFile imageFile) throws BaseException, IOException {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String current_date = simpleDateFormat.format(new Date());
@@ -186,10 +179,6 @@ public class AuthService {
             imageFile.transferTo(dest);
 
             return imageDownUrl;
-        }
-        catch(Exception e){
-            throw new BaseException(FILE_UPLOAD_ERROR);
-        }
     }
 
 }

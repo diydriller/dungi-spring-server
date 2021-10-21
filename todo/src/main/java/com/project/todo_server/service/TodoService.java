@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -34,17 +35,16 @@ public class TodoService {
 
     //하루 할일 생성
     @Transactional
-    public void createTodayTodo(CreateTodayTodoRequestDto todoRequestDto, Long userId, Long roomId) throws JsonProcessingException {
+    public void createTodayTodo(CreateTodayTodoRequestDto todoRequestDto, Long userId, Long roomId)
+            throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         Room room=roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)
                 .orElseThrow(()->{throw new BaseException(NOT_EXIST_ROOM);});
 
         String[]time=todoRequestDto.getTime().split("/");
-        int year=Integer.parseInt(time[0]);
-        int month=Integer.parseInt(time[1]);
-        int day=Integer.parseInt(time[2]);
-        int hour=Integer.parseInt(time[3]);
+        int year=Integer.parseInt(time[0]); int month=Integer.parseInt(time[1]);
+        int day=Integer.parseInt(time[2]); int hour=Integer.parseInt(time[3]);
         int minutes=Integer.parseInt(time[4]);
 
         LocalDateTime deadline=LocalDateTime.of(year,month,day,hour,minutes);
@@ -55,15 +55,15 @@ public class TodoService {
 
     //반복할일 생성
     @Transactional
-    public void createRepeatTodo(CreateRepeatTodoRequestDto todoRequestDto, Long userId, Long roomId) throws JsonProcessingException {
+    public void createRepeatTodo(CreateRepeatTodoRequestDto todoRequestDto, Long userId, Long roomId)
+            throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         Room room=roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)
                 .orElseThrow(()->{throw new BaseException(NOT_EXIST_ROOM);});
 
         String[]time=todoRequestDto.getTime().split("/");
-        int hour=Integer.parseInt(time[0]);
-        int minutes=Integer.parseInt(time[1]);
+        int hour=Integer.parseInt(time[0]); int minutes=Integer.parseInt(time[1]);
 
         LocalDateTime deadline=LocalDateTime.of(LocalDateTime.now().getYear(),
                 LocalDateTime.now().getMonthValue(),LocalDateTime.now().getDayOfMonth(),
@@ -85,7 +85,8 @@ public class TodoService {
 
     // 하루 할일 조회
     @Transactional
-    public List<GetTodayTodoResponseDto> getTodayTodo(Long userId,Long roomId, int page) throws JsonProcessingException {
+    public List<GetTodayTodoResponseDto> getTodayTodo(Long userId,Long roomId, int page)
+            throws IOException,BaseException {
 
         PageRequest pageRequest = PageRequest.of(page,10, Sort.Direction.DESC, "createdTime");
         redisService.getUser("login_"+userId);
@@ -114,7 +115,8 @@ public class TodoService {
     }
 
     // 반복 할일 조회
-    public List<GetRepeatTodoResponseDto> getRepeatTodo(Long userId, Long roomId, int page) throws JsonProcessingException {
+    public List<GetRepeatTodoResponseDto> getRepeatTodo(Long userId, Long roomId, int page)
+            throws IOException,BaseException {
         PageRequest pageRequest = PageRequest.of(page,10, Sort.Direction.DESC, "createdTime");
 
         redisService.getUser("login_"+userId);

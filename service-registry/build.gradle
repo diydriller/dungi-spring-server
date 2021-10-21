@@ -11,6 +11,8 @@ ext {
 
 
 dependencies {
+    annotationProcessor 'org.springframework:spring-aop:5.3.10'
+
     //eureka server
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 

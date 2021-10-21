@@ -1,6 +1,7 @@
 package com.project.notice_vote_server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.common.aop.IOExceptionAnnotation;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.project.common.response.BaseResponseStatus.JSON_OBJECT_MAPPING_ERROR;
+import java.io.IOException;
+
 import static com.project.common.response.BaseResponseStatus.SUCCESS;
 
 @RestController
@@ -27,63 +29,40 @@ public class NoticeVoteController {
 
     // 투표 생성
     @PostMapping(value = "/room/{roomId}/vote")
+    @IOExceptionAnnotation
     public BaseResponse createVote(
             @PathVariable Long roomId,
             @RequestHeader(value = "access_token") String token,
             @RequestBody @Valid CreateVoteRequestDto voteRequestDto
-            ) throws BaseException {
-        try {
+    ) throws BaseException, IOException {
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             noticeVoteService.createVote(voteRequestDto,userId,roomId);
-
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     // 공지 생성
     @PostMapping(value = "/room/{roomId}/notice")
+    @IOExceptionAnnotation
     public BaseResponse createNotice(
             @PathVariable Long roomId,
             @RequestHeader(value = "access_token") String token,
             @RequestBody @Valid CreateNoticeRequestDto noticeRequestDto
-    ) throws BaseException {
-        try {
+    ) throws BaseException,IOException {
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             noticeVoteService.createNotice(noticeRequestDto,userId,roomId);
-
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     // 공지 투표 조회
     @GetMapping(value = "/room/{roomId}/noticeVote")
+    @IOExceptionAnnotation
     public BaseResponse<?> getNoticeVote(
             @PathVariable Long roomId,
             @RequestHeader(value = "access_token") String token,
             @RequestParam("page") int page
-    ) throws BaseException {
-        try {
+    ) throws BaseException,IOException{
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             return new BaseResponse(noticeVoteService.getNoticeVote(roomId,userId,page));
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
 }

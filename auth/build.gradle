@@ -11,6 +11,8 @@ ext {
 
 
 dependencies {
+    annotationProcessor 'org.springframework:spring-aop:5.3.10'
+
 
     //twilio
     implementation group: "com.twilio.sdk", name: "twilio", version: "8.18.0"

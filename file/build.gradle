@@ -6,6 +6,8 @@ bootJar {
 }
 
 dependencies {
+    annotationProcessor 'org.springframework:spring-aop:5.3.10'
+
     //web
     compile('org.springframework.boot:spring-boot-starter-web')
 }

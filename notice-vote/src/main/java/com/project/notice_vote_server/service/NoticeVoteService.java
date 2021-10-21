@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class NoticeVoteService {
 
     // 투표생성
     @Transactional
-    public void createVote(CreateVoteRequestDto voteRequestDto,Long userId,Long roomId) throws JsonProcessingException {
+    public void createVote(CreateVoteRequestDto voteRequestDto,Long userId,Long roomId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
 
@@ -52,7 +53,7 @@ public class NoticeVoteService {
 
     // 공지생성
     @Transactional
-    public void createNotice(CreateNoticeRequestDto noticeRequestDto,Long userId,Long roomId) throws JsonProcessingException {
+    public void createNotice(CreateNoticeRequestDto noticeRequestDto,Long userId,Long roomId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         Room room=roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)
@@ -63,7 +64,7 @@ public class NoticeVoteService {
     }
 
     // 공지 투표 조회
-    public List<GetNoticeVoteResponseDto> getNoticeVote(Long roomId, Long userId,int page) throws JsonProcessingException {
+    public List<GetNoticeVoteResponseDto> getNoticeVote(Long roomId, Long userId,int page) throws IOException,BaseException {
 
         PageRequest pageRequest = PageRequest.of(page,10, Sort.Direction.DESC, "created_time");
 

@@ -1,6 +1,7 @@
 package com.project.room_server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.common.aop.IOExceptionAnnotation;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+
 import static com.project.common.response.BaseResponseStatus.*;
 
 @RestController
@@ -25,78 +28,49 @@ public class RoomController {
 
     // 방 생성
     @PostMapping("/room")
+    @IOExceptionAnnotation
     BaseResponse createRoom(@RequestBody @Valid CreateRoomRequestDto roomRequestDto,
                             @RequestHeader(value = "access_token") String token
-    )throws BaseException {
-        try{
+    )throws BaseException, IOException {
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             roomService.createRoom(roomRequestDto,userId);
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     // 방 입장
     @PostMapping("/room/{roomId}/member")
+    @IOExceptionAnnotation
     BaseResponse enterRoom(
             @RequestHeader(value = "access_token") String token,
             @PathVariable Long roomId
-    )throws BaseException{
-        try{
+    )throws IOException,BaseException{
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             roomService.enterRoom(userId,roomId);
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
 
     // 방 퇴장 , 방 삭제
     @DeleteMapping("/room/{roomId}/member")
+    @IOExceptionAnnotation
     BaseResponse leaveRoom(
             @RequestHeader(value = "access_token") String token,
             @PathVariable Long roomId
-    )throws BaseException{
-        try{
+    )throws IOException,BaseException{
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             roomService.leaveRoom(userId,roomId);
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     // 방 조회
     @GetMapping("/room")
+    @IOExceptionAnnotation
     BaseResponse<?> getRoom(
             @RequestHeader(value = "access_token") String token,
             @RequestParam("page") int page
-    )throws BaseException{
-        try{
+    )throws IOException,BaseException{
             Long userId=jwtService.verifyTokenAndGetUserId(token);
-
             return new BaseResponse(roomService.getRoom(userId,page));
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
 }

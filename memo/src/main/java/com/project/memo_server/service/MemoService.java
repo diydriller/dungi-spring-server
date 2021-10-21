@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.project.common.response.BaseResponseStatus.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MemoService {
 
     // 메모 생성
     @Transactional
-    public void createMemo(CreateMemoRequestDto memoRequestDto,Long userId,Long roomId) throws JsonProcessingException {
+    public void createMemo(CreateMemoRequestDto memoRequestDto,Long userId,Long roomId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
 
@@ -44,7 +45,7 @@ public class MemoService {
 
     //메모 조회
     @Transactional
-    public List<GetMemoResponseDto> getMemo(Long roomId,Long userId) throws JsonProcessingException {
+    public List<GetMemoResponseDto> getMemo(Long roomId,Long userId) throws IOException,BaseException {
 
         redisService.getUser("login_"+userId);
         Room room=roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)

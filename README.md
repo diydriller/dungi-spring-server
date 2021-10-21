@@ -1,3 +1,5 @@
+## 개선사항
+* aop 적용해서 반복되는 try catch문을 annotation으로 해결 
 ## 구현사항
 [![둥지메이트](http://img.youtube.com/vi/6M-7nF22ruM/0.jpg)](https://youtu.be/6M-7nF22ruM?t=0s)
 ### COMMON

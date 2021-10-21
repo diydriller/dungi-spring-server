@@ -2,6 +2,7 @@ package com.project.memo_server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.common.aop.IOExceptionAnnotation;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.project.common.response.BaseResponseStatus.JSON_OBJECT_MAPPING_ERROR;
+import java.io.IOException;
+
 import static com.project.common.response.BaseResponseStatus.SUCCESS;
 
 @RestController
@@ -27,39 +29,25 @@ public class MemoController {
 
     // 메모 생성
     @PostMapping("/room/{roomId}/memo")
+    @IOExceptionAnnotation
     BaseResponse createMemo(
             @PathVariable Long roomId,
             @RequestHeader(value = "access_token") String token,
             @RequestBody @Valid CreateMemoRequestDto memoRequestDto
-            )throws BaseException{
-        try{
+    )throws BaseException, IOException {
             Long userId=jwtService.verifyTokenAndGetUserId(token);
             memoService.createMemo(memoRequestDto,userId,roomId);
             return new BaseResponse(SUCCESS);
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     // 메모 조회
     @GetMapping("/room/{roomId}/memo")
+    @IOExceptionAnnotation
     BaseResponse getMemo(
             @PathVariable Long roomId,
             @RequestHeader(value = "access_token") String token
-    )throws BaseException{
-        try{
+    )throws BaseException,IOException{
             Long userId = jwtService.verifyTokenAndGetUserId(token);
             return new BaseResponse(memoService.getMemo(roomId,userId));
-        }
-        catch (JsonProcessingException e) {
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch(BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 }

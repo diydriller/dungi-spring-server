@@ -8,7 +8,10 @@ bootJar {
 
 
 dependencies {
-    //web
+
+    // aop
+    implementation 'org.springframework:spring-aop'
+    // web
     compile('org.springframework.boot:spring-boot-starter-web')
     // jpa + mysql
     runtimeOnly ('mysql:mysql-connector-java')

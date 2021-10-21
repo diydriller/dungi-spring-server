@@ -24,6 +24,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class RoomService {
 
     // 방생성
     @Transactional
-    public void createRoom(CreateRoomRequestDto roomRequestDto,Long userId) throws JsonProcessingException {
+    public void createRoom(CreateRoomRequestDto roomRequestDto,Long userId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         UserRoom userRoom=UserRoom.createUserRoom(user);
@@ -52,7 +53,7 @@ public class RoomService {
 
     // 방입장
     @Transactional
-    public void enterRoom(Long userId,Long roomId) throws JsonProcessingException {
+    public void enterRoom(Long userId,Long roomId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         Room room = roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)
@@ -74,7 +75,7 @@ public class RoomService {
 
     // 방퇴장 , 방 삭제
     @Transactional
-    public void leaveRoom(Long userId,Long roomId) throws JsonProcessingException {
+    public void leaveRoom(Long userId,Long roomId) throws IOException,BaseException {
 
         User user=redisService.getUser("login_"+userId);
         Room room = roomRepository.findByIdAndDeleteStatus(roomId,DeleteStatus.NOT_DELETED)
@@ -99,7 +100,7 @@ public class RoomService {
 
     // 방조회
     @Transactional
-    public GetRoomResponseDto getRoom(Long userId,int page) throws JsonProcessingException {
+    public GetRoomResponseDto getRoom(Long userId,int page) throws IOException,BaseException {
         PageRequest pageRequest = PageRequest.of(page,5, Sort.Direction.DESC, "createdTime");
 
         User user=redisService.getUser("login_"+userId);

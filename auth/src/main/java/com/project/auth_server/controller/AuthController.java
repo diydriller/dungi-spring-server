@@ -4,17 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.auth_server.dto.*;
 import com.project.auth_server.service.AuthService;
 import com.project.auth_server.service.KakaoHttpService;
+import com.project.common.aop.BaseExceptionAnnotation;
+import com.project.common.aop.IOExceptionAnnotation;
 import com.project.common.error.BaseException;
-import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
-import com.project.common.service.JwtService;
-import com.project.common.service.RedisService;
 import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
@@ -30,128 +28,70 @@ public class AuthController {
     private final KakaoHttpService kakaoHttpService;
 
     @PostMapping(value = "/user")
-    public BaseResponse join(@Valid JoinRequestDto joinRequest) throws BaseException {
-        try {
-            CheckEmailRequestDto emailRequestDto=new CheckEmailRequestDto(joinRequest.getEmail());
-            authService.checkEmailPresent(emailRequestDto);
-
+    @IOExceptionAnnotation
+    public BaseResponse join(@Valid JoinRequestDto joinRequest) throws BaseException,IOException {
+            authService.checkEmailPresent(joinRequest.getEmail());
             authService.createUser(joinRequest);
-
             return new BaseResponse(SUCCESS);
-        } catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     @PostMapping("/check/email")
+    @BaseExceptionAnnotation
     public BaseResponse checkEmail(@RequestBody @Valid CheckEmailRequestDto emailRequestDto) throws BaseException {
-
-        try {
-            authService.checkEmailPresent(emailRequestDto);
-
+            authService.checkEmailPresent(emailRequestDto.getEmail());
             return new BaseResponse(SUCCESS);
-        } catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     @PostMapping(value = "/phone")
+    @BaseExceptionAnnotation
     public BaseResponse sendSms(@RequestBody @Valid SendSmsRequestDto smsRequestDto) throws BaseException {
-
-        try {
             authService.sendSms(smsRequestDto);
             return new BaseResponse(SUCCESS);
-
-        } catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
-        }
     }
 
 
 
     @PostMapping("/check/phone")
-    public BaseResponse checkCode(@RequestBody @Valid CheckCodeRequestDto codeRequestDto) throws BaseException{
-        try{
-
+    @BaseExceptionAnnotation
+    public BaseResponse checkCode(@RequestBody @Valid CheckCodeRequestDto codeRequestDto) throws BaseException {
             authService.compareCode(codeRequestDto);
-
             return new BaseResponse(SUCCESS);
-        }catch (BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     //카카오 회원가입
     @PostMapping("/kakao/user")
+    @IOExceptionAnnotation
     public BaseResponse kakaoJoin(@Valid KakaoJoinRequestDto joinRequestDto) throws BaseException, IOException {
-        try{
+
             KakaoInfoDto.Account account= kakaoHttpService.getKakaoInfo(joinRequestDto.getAccess_token())
                     .getKakao_account();
-            CheckEmailRequestDto emailRequestDto=new CheckEmailRequestDto(account.getEmail());
-            authService.checkEmailPresent(emailRequestDto);
-
+            authService.checkEmailPresent(account.getEmail());
             authService.createKakaoUser(joinRequestDto);
             return new BaseResponse(SUCCESS);
-        }
-        catch (IOException e){
-            return new BaseResponse(HTTP_ERROR);
-        }
-        catch (BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
     @GetMapping("kakao/callback")
-    public BaseResponse<?> KakaoOauth(
-            @RequestParam String code
-    )throws BaseException {
-        try{
+    @IOExceptionAnnotation
+    public BaseResponse<?> KakaoOauth(@RequestParam String code) throws BaseException, IOException {
             KakaoTokenDto tokenDto= kakaoHttpService.getKakaoToken(code);
             return new BaseResponse(tokenDto);
-        }
-        catch(IOException e){
-            return new BaseResponse(HTTP_ERROR);
-        }
-        catch (BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
-
     }
 
     // 로그인
     @PostMapping("login")
-    public BaseResponse<?> login(
-            @RequestBody @Valid LoginRequestDto requestDto)
-            throws BaseException{
-        try {
+    @IOExceptionAnnotation
+    public BaseResponse<?> login(@RequestBody @Valid LoginRequestDto requestDto) throws BaseException,IOException {
             return new BaseResponse(authService.login(requestDto));
-        }
-        catch (JsonProcessingException e){
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch (BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
-
     }
 
     //카카오 로그인
     @PostMapping("/kakao/login")
-    public BaseResponse<?> kakaoLogin(@RequestBody @Valid KakaoLoginRequestDto requestDto) throws BaseException{
-        try {
+    @IOExceptionAnnotation
+    public BaseResponse<?> kakaoLogin(@RequestBody @Valid KakaoLoginRequestDto requestDto)
+            throws BaseException,IOException {
             KakaoInfoDto.Account account= kakaoHttpService.getKakaoInfo(requestDto.getAccess_token())
                     .getKakao_account();
             return new BaseResponse(authService.kakaoLogin(requestDto,account));
-        }
-        catch (JsonProcessingException e){
-            return new BaseResponse(JSON_OBJECT_MAPPING_ERROR);
-        }
-        catch (IOException e){
-            return new BaseResponse(HTTP_ERROR);
-        }
-        catch (BaseException e){
-            return new BaseResponse(e.getStatus());
-        }
     }
 
 }
