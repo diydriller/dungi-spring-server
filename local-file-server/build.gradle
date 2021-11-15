@@ -1,0 +1,17 @@
+jar {
+    enabled = true
+}
+bootJar {
+    enabled = true
+}
+
+dependencies {
+    annotationProcessor 'org.springframework:spring-aop:5.3.10'
+
+    //web
+    compile('org.springframework.boot:spring-boot-starter-web')
+}
+
+bootBuildImage{
+    imageName="diydriller/"+rootProject.name+'-'+project.name
+}

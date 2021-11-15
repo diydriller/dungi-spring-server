@@ -1,17 +1,19 @@
-jar {
-    enabled = true
+plugins {
+    id 'java'
 }
-bootJar {
-    enabled = true
+
+group 'com.project'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-    annotationProcessor 'org.springframework:spring-aop:5.3.10'
-
-    //web
-    compile('org.springframework.boot:spring-boot-starter-web')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
-bootBuildImage{
-    imageName="diydriller/"+rootProject.name+'-'+project.name
+test {
+    useJUnitPlatform()
 }

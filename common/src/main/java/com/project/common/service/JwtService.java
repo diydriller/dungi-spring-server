@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-import static com.project.common.response.BaseResponseStatus.JWT_ERROR;
+
 
 
 @Service
-@AllArgsConstructor
 public class JwtService {
 
     // 토큰 검증후 유저아이디반환
@@ -26,7 +25,7 @@ public class JwtService {
     // 토큰 생성
     public String getToken(User user)  {
         String jwtToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 60 * 60 * 24)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 60 * 24 * 30)))
                 .withClaim("id", user.getId())
                 .withClaim("email", user.getEmail())
                 .sign(Algorithm.HMAC512("jwt sign value"));

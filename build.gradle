@@ -50,37 +50,7 @@ subprojects {
 
 }
 
-project(':auth') {
-	dependencies {
-		compile project(':common')
-	}
-}
-
-project(':todo') {
-	dependencies {
-		compile project(':common')
-	}
-}
-
-project(':room') {
-	dependencies {
-		compile project(':common')
-	}
-}
-
-project(':memo') {
-	dependencies {
-		compile project(':common')
-	}
-}
-
-project(':notice-vote') {
-	dependencies {
-		compile project(':common')
-	}
-}
-
-project(':chart') {
+project(':api-server') {
 	dependencies {
 		compile project(':common')
 	}

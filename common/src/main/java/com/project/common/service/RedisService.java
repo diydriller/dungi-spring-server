@@ -1,12 +1,11 @@
 package com.project.common.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
-import lombok.AllArgsConstructor;
+import com.project.common.cipher.Aes128;
+import com.project.common.util.StringUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,9 +17,10 @@ import java.util.concurrent.TimeUnit;
 import static com.project.common.response.BaseResponseStatus.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RedisService {
 
+    private final Aes128 aes128;
     private final RedisTemplate redisTemplate;
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
@@ -33,23 +33,23 @@ public class RedisService {
     }
 
 
-    public User getUser(String k) throws JsonProcessingException {
+    public User getUser(String k) throws Exception {
         String userJson = getStringOps(k)
                 .map(Object::toString)
                 .orElseThrow(()->{throw new BaseException(NOT_USER_LOGIN);});
 
         ObjectMapper objectMapper=new ObjectMapper();
-        return objectMapper.readValue(userJson,User.class);
-
+        User user=objectMapper.readValue(userJson,User.class);
+        return aes128.decryptUser(user);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    public void saveUser(User user) throws JsonProcessingException {
 
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public void saveUser(User user) throws Exception {
+        aes128.encryptUser(user);
         ObjectMapper objectMapper=new ObjectMapper();
         String userJson=objectMapper.writeValueAsString(user);
-
-        redisTemplate.opsForValue().set("login_"+user.getId(),userJson);
+        setStringOpsTtl(StringUtil.redisLogin(user.getId()),userJson,1,TimeUnit.HOURS);
     }
 
 

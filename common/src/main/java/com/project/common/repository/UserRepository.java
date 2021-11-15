@@ -17,7 +17,7 @@ public interface UserRepository extends CrudRepository<User,Long> {
     Optional<User> findByIdAndDeleteStatus(Long id, DeleteStatus status);
     User save(User user);
 
-    @Query("select new com.project.common.dto.GetRoomUserDto(u.profileImg,u.nickname) from users u join u.userRoomList ur where ur.room=:room")
+    @Query("select new com.project.common.dto.GetRoomUserDto(u.profileImg,u.nickname) from Users u join u.userRoomList ur where ur.room=:room")
     List<GetRoomUserDto> findRoomUser(Room room);
 
 

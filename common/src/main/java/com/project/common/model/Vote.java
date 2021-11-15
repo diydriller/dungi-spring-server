@@ -31,6 +31,7 @@ public class Vote extends NoticeVote{
         Vote vote=new Vote();
         vote.setRoom(room);
         vote.setUser(user);
+        vote.setDeleteStatus(DeleteStatus.NOT_DELETED);
         vote.setFinishStatus(FinishStatus.UNFINISHED);
         vote.setTitle(title);
         for(VoteItem voteItem:voteItems){

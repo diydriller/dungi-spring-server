@@ -1,11 +1,11 @@
 ## 개선사항
 * aop 적용해서 반복되는 try catch문을 annotation으로 해결 
+* redis 캐시 사용
 ## 구현사항
 [![둥지메이트](http://img.youtube.com/vi/6M-7nF22ruM/0.jpg)](https://youtu.be/6M-7nF22ruM?t=0s)
 ### COMMON
 * multi-module을 사용해서 의존성을 최소화
-* spring-cloud를  사용해서 micro service artitecture를 구현
-* redis sentinel 구축해서 redis 서버 장애 발생시 복구하고 redis로 서버간 데이터 공유
+* redis sentinel 구축해서 redis 서버 장애 발생시 복구하고 redis로 데이터 공유
 * configuration server 로부터 설정정보 주입
 * 설정정보 파일은 git secret을 사용해 암호화
 * docker compose 사용
@@ -49,5 +49,3 @@
 * retrofit 2.9.0
 * jwt 3.18.1
 * twilio 8.18.0
-
-

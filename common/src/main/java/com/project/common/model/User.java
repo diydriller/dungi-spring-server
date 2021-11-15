@@ -2,15 +2,17 @@ package com.project.common.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.common.error.BaseException;
 import lombok.*;
-
+import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name="users")
-@Data
+import static com.project.common.response.BaseResponseStatus.INVALID_VALUE;
+
+@Entity(name="Users")
+@Getter
 @NoArgsConstructor
 @ToString(exclude={"memoList","userRoomList","todoList","noticeVoteList","userVoteItemList"})
 public class User extends BaseEntity{
@@ -43,7 +45,13 @@ public class User extends BaseEntity{
     @Column(name="best_mate_count")
     private int bestMateCount;
 
+    @Builder
     public User(String name, String nickname, String email, String password, String phoneNumber, String profileImg,String provider) {
+
+        if(StringUtils.isEmpty(nickname)) throw new BaseException(INVALID_VALUE);
+        if(StringUtils.isEmpty(email)) throw new BaseException(INVALID_VALUE);
+        if(StringUtils.isEmpty(profileImg)) throw new BaseException(INVALID_VALUE);
+
         this.name = name;
         this.nickname = nickname;
         this.email = email;
@@ -52,15 +60,9 @@ public class User extends BaseEntity{
         this.profileImg = profileImg;
         this.provider=provider;
         this.deleteStatus=DeleteStatus.NOT_DELETED;
+        this.bestMateCount=0;
     }
 
-    public User(String nickname, String email, String profileImg, String provider) {
-        this.nickname = nickname;
-        this.email = email;
-        this.profileImg = profileImg;
-        this.provider = provider;
-        this.deleteStatus=DeleteStatus.NOT_DELETED;
-    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

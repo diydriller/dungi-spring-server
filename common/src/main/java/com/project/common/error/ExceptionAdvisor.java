@@ -3,6 +3,7 @@ package com.project.common.error;
 import com.project.common.response.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.validation.BindException;
@@ -32,17 +33,16 @@ public class ExceptionAdvisor {
 
 
 
-/*
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(MissingRequestHeaderException.class)
     @ResponseBody
-    public BaseResponse handleValidationException(NoHandlerFoundException ex){
+    public BaseResponse handleMissingHeaderException(MissingRequestHeaderException ex){
 
         return BaseResponse.builder()
                 .isSuccess(false)
-                .message(ex.getMessage())
-                .status(404)
+                .message("권한이 없습니다")
+                .code(403)
                 .build();
     }
-*/
+
 }

@@ -1,14 +1,10 @@
 // 빌드 하는 곳
 rootProject.name = 'dungi'
-include 'auth'
 include 'common'
 include 'service-registry'
 include 'geteway'
-include 'file'
-include 'todo'
-include 'room'
-include 'memo'
+include 'local-file-server'
 include 'config'
-include 'notice-vote'
-include 'chart'
+include 'api-server'
+include 'file'
 

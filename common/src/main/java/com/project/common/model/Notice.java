@@ -18,6 +18,7 @@ public class Notice extends NoticeVote {
         Notice notice=new Notice();
         notice.setRoom(room);
         notice.setUser(user);
+        notice.setDeleteStatus(DeleteStatus.NOT_DELETED);
         notice.setNoticeItem(noticeItem);
         return notice;
     }
