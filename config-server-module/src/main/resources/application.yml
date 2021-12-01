@@ -1,0 +1,10 @@
+server:
+  port: 9000
+
+
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///D:/practice/spring/dungi/file/server

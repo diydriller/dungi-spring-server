@@ -19,11 +19,20 @@ services:
       - currency-network
     volumes:
       - type: bind
-        source: D:/practice/spring/dungi/config-file/server
+        source: D:/practice/spring/dungi/file/server
         target: /usr/share/config
     environment:
       SPRING.PROFILES.ACTIVE: native
       SPRING.CLOUD.CONFIG.SERVER.NATIVE.SEARCH_LOCATIONS: file:///usr/share/config
+
+
+  redis:
+    image: redis
+    mem_limit: 300m
+    ports:
+      - "6379:6379"
+    networks:
+      - currency-network
 #
 #  api:
 #    image: diydriller/dungi-auth:latest
@@ -40,29 +49,9 @@ services:
 #      - service-registry
 #      - config
 #
-#
-#
-#  gateway:
-#    image: diydriller/dungi-geteway:latest
-#    mem_limit: 700m
-#    ports:
-#      - "9001:9001"
-#    networks:
-#      - currency-network
-#    environment:
-#      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
-#    depends_on:
-#      - service-registry
 
 
 
-  redis:
-    image: redis
-    mem_limit: 300m
-    ports:
-      - "6379:6379"
-    networks:
-      - currency-network
 #
 #
 #  elasticsearch:

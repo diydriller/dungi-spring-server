@@ -1,0 +1,16 @@
+jar {
+    enabled = true
+}
+bootJar {
+    enabled = false
+}
+
+
+
+dependencies {
+    // redis + session
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('org.springframework.session:spring-session-data-redis')
+    // util
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.9.9"
+}

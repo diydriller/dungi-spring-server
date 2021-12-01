@@ -50,8 +50,18 @@ subprojects {
 
 }
 
-project(':api-server') {
+project(':api-server-module') {
 	dependencies {
-		compile project(':common')
+		compile project(':redis-module')
+	}
+	dependencies {
+		compile project(':common-module')
 	}
 }
+
+project(':batch-module') {
+	dependencies {
+		compile project(':common-module')
+	}
+}
+

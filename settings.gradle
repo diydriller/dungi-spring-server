@@ -1,10 +1,10 @@
 // 빌드 하는 곳
 rootProject.name = 'dungi'
-include 'common'
-include 'service-registry'
-include 'geteway'
+include 'common-module'
+include 'service-registry-server-module'
 include 'local-file-server'
-include 'config'
-include 'api-server'
-include 'file'
+include 'config-server-module'
+include 'api-server-module'
+include 'redis-module'
+include 'batch-module'
 
