@@ -25,8 +25,12 @@ dependencies {
     implementation group: "com.twilio.sdk", name: "twilio", version: "8.18.0"
     //web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
     //util
     implementation 'org.apache.commons:commons-lang3:3.9'
+
+
 
 }
 

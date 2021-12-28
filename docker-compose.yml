@@ -3,16 +3,14 @@ version: '3.7'
 services:
 
   service-registry:
-    image: diydriller/dungi-service-registry:latest
-    mem_limit: 700m
+    image: diydriller/dungi-service-registry-server-module:latest
     ports:
       - "8761:8761"
     networks:
       - currency-network
 
   config:
-    image: diydriller/dungi-config:latest
-    mem_limit: 700m
+    image: diydriller/dungi-config-server-module:latest
     ports:
       - "9000:9000"
     networks:
@@ -28,11 +26,24 @@ services:
 
   redis:
     image: redis
-    mem_limit: 300m
     ports:
       - "6379:6379"
     networks:
       - currency-network
+
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - type: bind
+        source: D:/practice/spring/dungi/file/mysql
+        target: /data/db
+    container_name: "mysql"
+    ports:
+      - "3306:3306"
+
 #
 #  api:
 #    image: diydriller/dungi-auth:latest

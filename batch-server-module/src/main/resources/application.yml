@@ -1,0 +1,22 @@
+spring:
+
+  application:
+    name: BATCH-SERVICE
+
+  config:
+    import: optional:configserver:http://localhost:9000
+  cloud:
+    config:
+      profile: prod
+
+  # 데이터베이스 설정
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    generate-ddl: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

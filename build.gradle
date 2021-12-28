@@ -59,7 +59,7 @@ project(':api-server-module') {
 	}
 }
 
-project(':batch-module') {
+project(':batch-server-module') {
 	dependencies {
 		compile project(':common-module')
 	}

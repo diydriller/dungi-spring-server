@@ -1,26 +1,22 @@
-package com.project.api_server;
+package com.project.batch_server;
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
-@SpringBootApplication
+
+@EnableScheduling
+@EnableBatchProcessing
 @EntityScan(basePackages = "com.project.common")
 @EnableJpaRepositories(basePackages = "com.project.common")
-@ComponentScan(basePackages = {"com.project.api_server","com.project.redis","com.project.common"})
-@EnableEurekaClient
-@EnableJpaAuditing
-@EnableScheduling
-public class ApiServerApplication {
+@ComponentScan(basePackages = {"com.project.batch_server","com.project.common"})
+@SpringBootApplication
+public class BatchServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ApiServerApplication.class, args);
+        SpringApplication.run(BatchServerApplication.class,args);
     }
 }
-

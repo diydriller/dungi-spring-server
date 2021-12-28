@@ -1,5 +1,6 @@
 package com.project.api_server.application.memo.controller;
 
+import com.project.api_server.domain.memo.service.MemoService;
 import com.project.common.error.AuthenticationException;
 import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
@@ -24,7 +25,7 @@ import static com.project.common.response.BaseResponseStatus.SUCCESS;
 @Slf4j
 public class MemoController {
 
-    private final MemoServiceImpl memoService;
+    private final MemoService memoService;
 
     private String LOGIN_USER="login_user";
 
@@ -32,7 +33,7 @@ public class MemoController {
     @PostMapping("/room/{roomId}/memo")
     BaseResponse createMemo(
             @PathVariable Long roomId,
-            @RequestBody @Valid CreateMemoRequestDto memoRequestDto,HttpSession session) {
+            @RequestBody @Valid CreateMemoRequestDto memoRequestDto,HttpSession session) throws Exception {
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
         memoService.createMemo(memoRequestDto,user,roomId);
@@ -42,7 +43,7 @@ public class MemoController {
     // 메모 조회
     @GetMapping("/room/{roomId}/memo")
     BaseResponse getMemo(
-            @PathVariable Long roomId,HttpSession session){
+            @PathVariable Long roomId,HttpSession session) throws Exception {
         User user = (User) session.getAttribute(LOGIN_USER);
         return new BaseResponse(memoService.getMemo(roomId,user));
     }

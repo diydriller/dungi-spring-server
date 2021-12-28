@@ -12,10 +12,11 @@ import java.util.List;
 
 import static com.project.common.response.BaseResponseStatus.INVALID_VALUE;
 
-@Entity(name="Users")
+@Entity
 @Getter
 @NoArgsConstructor
 @ToString(exclude={"memoList","userRoomList","todoList","noticeVoteList","userVoteItemList"})
+@Table(name="Users",indexes = @Index(name="user_idx",columnList = "email",unique = true))
 public class User extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,6 +65,10 @@ public class User extends BaseEntity implements Serializable {
         this.provider=provider;
         this.deleteStatus=DeleteStatus.NOT_DELETED;
         this.bestMateCount=0;
+    }
+
+    public User(Long id){
+        this.id=id;
     }
 
 

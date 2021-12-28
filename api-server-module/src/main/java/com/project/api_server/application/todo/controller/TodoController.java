@@ -30,8 +30,7 @@ public class TodoController {
     @PostMapping("/room/{roomId}/todo/day")
     BaseResponse createTodayTodo(
             @PathVariable Long roomId,
-            @RequestBody @Valid CreateTodayTodoRequestDto todoRequestDto, HttpSession session
-            ) throws Exception {
+            @RequestBody @Valid CreateTodayTodoRequestDto todoRequestDto, HttpSession session){
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
             todoService.createTodayTodo(todoRequestDto,user,roomId);

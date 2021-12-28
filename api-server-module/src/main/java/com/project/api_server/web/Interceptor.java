@@ -21,7 +21,8 @@ public class Interceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader(ACCESS_TOKEN);
-
+        System.out.println(request.getRequestURI());
+        System.out.println(token);
         if(StringUtils.isEmpty(token)){
             throw new AuthenticationException(AUTHENTICATION_ERROR);
         }
@@ -29,6 +30,7 @@ public class Interceptor implements HandlerInterceptor {
             JwtUtil.verifyToken(token);
         }
         catch (Exception e){
+            e.printStackTrace();
             throw new AuthenticationException(AUTHENTICATION_ERROR);
         }
         return true;

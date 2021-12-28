@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,8 @@ public class RoomStoreImpl implements RoomStore {
         UserRoom userRoom=UserRoom.createUserRoom(user);
         Room room=Room.createRoom(requestDto.getName(),requestDto.getColor(),
                 userRoom);
+
+        userRoomRepository.save(userRoom);
         roomRepository.save(room);
     }
 

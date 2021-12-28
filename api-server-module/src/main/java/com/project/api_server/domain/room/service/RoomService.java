@@ -6,8 +6,8 @@ import com.project.common.model.User;
 
 public interface RoomService {
 
-    public void createRoom(CreateRoomRequestDto roomRequestDto, User user);
-    public void enterRoom(User user, Long roomId);
-    public void leaveRoom(User user,Long roomId);
-    public GetRoomResponseDto getRoom(User user, int page);
+    void createRoom(CreateRoomRequestDto roomRequestDto, User user);
+    void enterRoom(User user, Long roomId);
+    void leaveRoom(User user,Long roomId);
+    GetRoomResponseDto getRoom(User user, int page);
 }

@@ -3,15 +3,19 @@ server:
 
 spring:
 
+  # 세션 만료 시간
+#  session:
+#    timeout: 600
+
   application:
     name: API-SERVICE
 
-  # config 서버로부터 설정정보 가져오기
+  # config 서버로부터 비밀설정정보 가져오기 (dev/prod)
   config:
     import: optional:configserver:http://localhost:9000
   cloud:
     config:
-      profile: dev
+      profile: prod
 
   servlet:
     # 파일 요청 용량 설정
@@ -19,9 +23,9 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
 
+
   # 데이터베이스 설정
   jpa:
-    #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
       naming:
@@ -47,6 +51,7 @@ redis:
     port1: 26379
     port2: 26380
     port3: 26381
+
 
 
 # file 설정

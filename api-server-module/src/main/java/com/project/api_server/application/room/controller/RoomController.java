@@ -29,8 +29,7 @@ public class RoomController {
 
     // 방 생성
     @PostMapping("/room")
-    BaseResponse createRoom(@RequestBody @Valid CreateRoomRequestDto roomRequestDto, HttpSession session)
-            throws Exception {
+    BaseResponse createRoom(@RequestBody @Valid CreateRoomRequestDto roomRequestDto, HttpSession session) {
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
         roomService.createRoom(roomRequestDto,user);
@@ -40,8 +39,7 @@ public class RoomController {
     // 방 입장
     @PostMapping("/room/{roomId}/member")
     BaseResponse enterRoom(
-            @PathVariable Long roomId,HttpSession session
-    ) throws Exception {
+            @PathVariable Long roomId,HttpSession session){
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
         roomService.enterRoom(user,roomId);
@@ -52,8 +50,7 @@ public class RoomController {
     // 방 퇴장 , 방 삭제
     @DeleteMapping("/room/{roomId}/member")
     BaseResponse leaveRoom(
-            @PathVariable Long roomId,HttpSession session
-    ) throws Exception {
+            @PathVariable Long roomId,HttpSession session){
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
             roomService.leaveRoom(user,roomId);
@@ -63,8 +60,7 @@ public class RoomController {
     // 방 조회
     @GetMapping("/room")
     BaseResponse<?> getRoom(
-            @RequestParam("page") int page,HttpSession session
-    ) throws Exception {
+            @RequestParam("page") int page,HttpSession session){
         User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
                 .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
             return new BaseResponse(roomService.getRoom(user,page));

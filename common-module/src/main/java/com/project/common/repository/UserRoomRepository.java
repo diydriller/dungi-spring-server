@@ -29,5 +29,4 @@ public interface UserRoomRepository extends CrudRepository<UserRoom,Long> {
 
     @Query("select count(ur) from UserRoom ur where ur.room=:room and ur.deleteStatus=:status")
     int countRoomUserByDeleteStatus(@Param("room") Room room,@Param("status") DeleteStatus status);
-
 }

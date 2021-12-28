@@ -44,7 +44,7 @@ public class Todo extends BaseEntity{
 
     public void setUser(User user){
         this.user=user;
-        user.getTodoList().add(this);
+        //user.getTodoList().add(this);
     }
 
 

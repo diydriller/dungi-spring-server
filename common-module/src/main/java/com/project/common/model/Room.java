@@ -28,7 +28,7 @@ public class Room extends BaseEntity{
     @Column(name="delete_status")
     private DeleteStatus deleteStatus;
 
-    @OneToMany(mappedBy = "room",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room")
     private List<UserRoom> userRoomList=new ArrayList<>();
 
     @OneToMany(mappedBy = "room")
