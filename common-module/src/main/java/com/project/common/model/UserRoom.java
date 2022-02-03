@@ -28,7 +28,7 @@ public class UserRoom {
 
     public void setUser(User user){
         this.user=user;
-//        user.getUserRoomList().add(this);
+        user.getUserRoomList().add(this);
     }
 
     public void setRoom(Room room){

@@ -13,7 +13,7 @@ dependencies {
     implementation 'org.springframework:spring-aop'
     // jpa + mysql
     runtimeOnly('mysql:mysql-connector-java')
-    runtimeOnly 'com.h2database:h2'
+    //runtimeOnly 'com.h2database:h2'
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     // util
     implementation 'org.apache.commons:commons-lang3:3.9'

@@ -32,23 +32,23 @@ public class RedisConfig{
     private String redisHost;
     @Value("${redis.port}")
     private int redisPort;
-    /*
+
     @Value("${redis.sentinel.port1}")
     private int sentinelPort1;
     @Value("${redis.sentinel.port2}")
     private int sentinelPort2;
     @Value("${redis.sentinel.port3}")
-    private int sentinelPort3;*/
+    private int sentinelPort3;
 
     private final ObjectMapper objectMapper;
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        /*RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration()
+        RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration()
                 .master(masterName)
                 .sentinel(redisHost,sentinelPort1)
                 .sentinel(redisHost,sentinelPort2)
-                .sentinel(redisHost,sentinelPort3);*/
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(/*redisSentinelConfiguration*/redisHost,redisPort);
+                .sentinel(redisHost,sentinelPort3);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisSentinelConfiguration);
 
         return lettuceConnectionFactory;
     }

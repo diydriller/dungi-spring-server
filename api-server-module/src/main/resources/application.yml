@@ -3,10 +3,6 @@ server:
 
 spring:
 
-  # 세션 만료 시간
-#  session:
-#    timeout: 600
-
   application:
     name: API-SERVICE
 
@@ -22,9 +18,21 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
+  main:
+    allow-bean-definition-overriding: true
 
   # 데이터베이스 설정
+  datasource:
+    master:
+      jdbc-url: jdbc:mysql://localhost:3300/spring_dungi
+      username: root
+      password:
+    slave:
+      jdbc-url: jdbc:mysql://localhost:3301/spring_dungi
+      username: root
+      password:
+
+  # jpa 설정
   jpa:
     hibernate:
       ddl-auto: update
@@ -38,7 +46,7 @@ spring:
 
 # redis 설정
 redis:
-  port: 6379
+  port: 6300
   host: localhost
   lettuce:
     pool:

@@ -11,6 +11,6 @@ gradlew
 
 ### 설정파일
 *.properties
-
+docker_data/
 
 .gitsecret/keys/random_seed

@@ -1,65 +1,172 @@
 version: '3.7'
 
+networks:
+  app_subnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
+
 services:
 
   service-registry:
     image: diydriller/dungi-service-registry-server-module:latest
     ports:
       - "8761:8761"
-    networks:
-      - currency-network
 
   config:
     image: diydriller/dungi-config-server-module:latest
     ports:
       - "9000:9000"
-    networks:
-      - currency-network
     volumes:
-      - type: bind
-        source: D:/practice/spring/dungi/file/server
-        target: /usr/share/config
+      - ./file/server:/usr/share/config
     environment:
       SPRING.PROFILES.ACTIVE: native
       SPRING.CLOUD.CONFIG.SERVER.NATIVE.SEARCH_LOCATIONS: file:///usr/share/config
 
+# mysql
+  mysql_master:
+    container_name: "mysql_master"
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker_data/mysql_master:/var/lib/mysql
+      - ./docker_init/mysql_master:/docker-entrypoint-initdb.d
+      - ./docker_conf/mysql_master:/etc/mysql/conf.d
+    ports:
+      - "3300:3306"
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.40
+    restart: always
 
-  redis:
+  mysql_slave:
+    container_name: "mysql_slave"
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker_data/mysql_slave:/var/lib/mysql
+      - ./docker_init/mysql_slave:/docker-entrypoint-initdb.d
+      - ./docker_conf/mysql_slave:/etc/mysql/conf.d
+    ports:
+      - "3301:3306"
+    restart: always
+    depends_on:
+      - mysql_master
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.41
+
+# redis
+  redis_sentinel_master:
+    container_name: redis_sentinel_master
     image: redis
     ports:
-      - "6379:6379"
+      - 6300:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./docker_data/redis_sentinel_master:/data
+      - ./docker_conf/redis_sentinel_master/redis_sentinel_master.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.42
+    restart: always
+
+  redis_sentinel_slave:
+    container_name: redis_sentinel_slave
+    image: redis
+    ports:
+      - 6301:6379
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis_sentinel_master 6379
+    volumes:
+      - ./docker_data/redis_sentinel_slave:/data
+      - ./docker_conf/redis_sentinel_slave/redis_sentinel_slave.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.43
+    depends_on:
+      - redis_sentinel_master
+    restart: always
+
+  redis_sentinel_1:
+    container_name: redis_sentinel_1
+    image: redis
+    ports:
+      - 26379:26379
+    command: redis-sentinel /usr/local/etc/redis/redis_sentinel_1.conf
+    volumes:
+      - ./docker_data/redis_sentinel_1:/data
+      - ./docker_conf/redis_sentinel_1:/usr/local/etc/redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.44
+    depends_on:
+      - redis_sentinel_master
+    restart: always
+
+  redis_sentinel_2:
+    container_name: redis_sentinel_2
+    image: redis
+    ports:
+      - 26380:26380
+    command: redis-sentinel /usr/local/etc/redis/redis_sentinel_2.conf
+    volumes:
+      - ./docker_data/redis_sentinel_2:/data
+      - ./docker_conf/redis_sentinel_2:/usr/local/etc/redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.45
+    depends_on:
+      - redis_sentinel_master
+    restart: always
+
+  redis_sentinel_3:
+    container_name: redis_sentinel_3
+    image: redis
+    ports:
+      - 26381:26381
+    command: redis-sentinel /usr/local/etc/redis/redis_sentinel_3.conf
+    volumes:
+      - ./docker_data/redis_sentinel_3:/data
+      - ./docker_conf/redis_sentinel_3:/usr/local/etc/redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      app_subnet:
+        ipv4_address: 172.21.0.46
+    depends_on:
+      - redis_sentinel_master
+    restart: always
+
+
+
+
+  api:
+    image: diydriller/dungi-auth:latest
+    ports:
+      - "9002:9002"
     networks:
       - currency-network
-
-  mysql:
-    image: mysql
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - type: bind
-        source: D:/practice/spring/dungi/file/mysql
-        target: /data/db
-    container_name: "mysql"
-    ports:
-      - "3306:3306"
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
+    depends_on:
+      - redis
+      - service-registry
+      - config
 
-#
-#  api:
-#    image: diydriller/dungi-auth:latest
-#    mem_limit: 700m
-#    ports:
-#      - "9002:9002"
-#    networks:
-#      - currency-network
-#    environment:
-#      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
-#      SPRING.CONFIG.IMPORT: optional:configserver:http://config:9000
-#    depends_on:
-#      - redis
-#      - service-registry
-#      - config
-#
 
 
 
@@ -84,8 +191,6 @@ services:
 #      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
 #      discovery.type: single-node
 #      ELASTIC_PASSWORD: hyun
-#    networks:
-#      - currency-network
 #
 #  logstash:
 #    image: docker.elastic.co/logstash/logstash:6.7.2
@@ -105,8 +210,6 @@ services:
 #      - "9600:9600"
 #    environment:
 #      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-#    networks:
-#      - currency-network
 #    depends_on:
 #      - elasticsearch
 #
@@ -120,14 +223,7 @@ services:
 #        read_only: true
 #    ports:
 #      - "5601:5601"
-#    networks:
-#      - currency-network
 #    depends_on:
 #      - elasticsearch
 
 
-volumes:
-  elasticsearch:
-networks:
-  currency-network:
-    driver: bridge
