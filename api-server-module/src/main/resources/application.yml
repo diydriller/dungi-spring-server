@@ -2,19 +2,18 @@ server:
   port: 9002
 
 spring:
-
   application:
     name: API-SERVICE
 
-  # config 서버로부터 비밀설정정보 가져오기 (dev/prod)
+  # config 서버 설정
   config:
     import: optional:configserver:http://localhost:9000
   cloud:
     config:
       profile: prod
 
+  # 요청 설정
   servlet:
-    # 파일 요청 용량 설정
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
@@ -79,4 +78,11 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+# 설정파일 refresh 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["env", "refresh"]
 

@@ -8,4 +8,5 @@ include 'service-registry-server-module'
 include 'config-server-module'
 include 'api-server-module'
 include 'batch-server-module'
+include 'gateway-server-module'
 

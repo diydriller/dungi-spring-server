@@ -2,11 +2,13 @@ package com.project.api_server.domain.user.service;
 
 import com.project.api_server.application.user.dto.*;
 import com.project.api_server.domain.sns.SnsHttpService;
+import com.project.api_server.perfomance.PerformanceLog;
 import com.project.common.infrastructure.cipher.SymmetricCipher;
 import com.project.common.error.BaseException;
 import com.project.api_server.infrastructure.file.FileUploader;
 import com.project.common.model.User;
 import com.project.common.util.StringUtil;
+import com.sun.jdi.event.ExceptionEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +27,6 @@ public class UserServiceImpl implements UserService {
     private final FileUploader fileUploader;
     private final UserStore userStore;
     private final SnsHttpService snsHttpService;
-
 
     // 이메일 중복 여부 - 이미지 업로드 - 비밀번호 암호화 - DB 저장
     @Transactional

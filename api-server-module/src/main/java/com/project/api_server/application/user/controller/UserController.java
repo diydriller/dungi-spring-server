@@ -7,6 +7,8 @@ import com.project.common.response.BaseResponse;
 import com.project.common.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private String LOGIN_USER="login_user";
+
 
     // 유저 생성
     @PostMapping(value = "/user")

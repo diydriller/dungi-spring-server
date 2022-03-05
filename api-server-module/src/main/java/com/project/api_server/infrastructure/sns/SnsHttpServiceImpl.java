@@ -4,12 +4,14 @@ import com.project.api_server.application.user.dto.SnsInfoDto;
 import com.project.api_server.application.user.dto.SnsTokenDto;
 import com.project.api_server.domain.sns.SnsHttpService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@RefreshScope
 @Component
 public class SnsHttpServiceImpl implements SnsHttpService {
 

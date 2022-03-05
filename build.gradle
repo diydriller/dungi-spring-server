@@ -34,18 +34,16 @@ subprojects {
 		//lombok
 		compileOnly 'org.projectlombok:lombok:1.18.16'
 		annotationProcessor 'org.projectlombok:lombok:1.18.16'
-
-		//jwt
-		implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.0'
-
 		//test
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		//jwt
+		implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.0'
+		// retrofit
 		implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.8.1'
+		// jasypt
+		implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 	}
 
-	test {
-		useJUnitPlatform()
-	}
 
 
 }
@@ -64,4 +62,6 @@ project(':batch-server-module') {
 		compile project(':common-module')
 	}
 }
+
+
 

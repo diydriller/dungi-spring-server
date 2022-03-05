@@ -1,6 +1,7 @@
 package com.project.api_server.infrastructure.user;
 
 import com.project.api_server.domain.user.service.UserStore;
+import com.project.api_server.perfomance.PerformanceLog;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
 import com.project.common.repository.UserRepository;
@@ -10,10 +11,12 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import static com.project.common.response.BaseResponseStatus.*;
 
+@RefreshScope
 @Component
 @RequiredArgsConstructor
 public class UserStoreImpl implements UserStore {

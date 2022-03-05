@@ -10,8 +10,6 @@ ext {
 }
 
 dependencies {
-    annotationProcessor 'org.springframework:spring-aop:5.3.10'
-
     // config-server
     implementation 'org.springframework.cloud:spring-cloud-config-server'
     // web
