@@ -48,3 +48,12 @@ bootBuildImage{
     imageName="diydriller/"+rootProject.name+'-'+project.name
 }
 
+
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        csv.enabled true
+        xml.enabled false
+    }
+}

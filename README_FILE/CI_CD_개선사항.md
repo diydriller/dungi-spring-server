@@ -7,5 +7,6 @@
     gradlew clean service-registry-server-module:bootBuildImage
 ```
 ```shell
+    mkdir docker/docker_data
     docker-compose --env-file {env file} up
 ```

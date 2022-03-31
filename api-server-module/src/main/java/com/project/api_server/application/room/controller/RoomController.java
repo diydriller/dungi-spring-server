@@ -1,11 +1,11 @@
 package com.project.api_server.application.room.controller;
 
 
+import com.project.api_server.domain.room.service.RoomService;
 import com.project.common.error.AuthenticationException;
 import com.project.common.model.User;
 import com.project.common.response.BaseResponse;
 import com.project.api_server.application.room.dto.CreateRoomRequestDto;
-import com.project.api_server.domain.room.service.RoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ import static com.project.common.response.BaseResponseStatus.SUCCESS;
 @Slf4j
 public class RoomController {
 
-    private final RoomServiceImpl roomService;
+    private final RoomService roomService;
 
     private String LOGIN_USER="login_user";
 
@@ -57,13 +57,5 @@ public class RoomController {
             return new BaseResponse(SUCCESS);
     }
 
-    // 방 조회
-    @GetMapping("/room")
-    BaseResponse<?> getRoom(
-            @RequestParam("page") int page,HttpSession session){
-        User user = Optional.ofNullable(session.getAttribute(LOGIN_USER))
-                .map(o->(User)o).orElseThrow(()->new AuthenticationException(AUTHENTICATION_ERROR));
-            return new BaseResponse(roomService.getRoom(user,page));
-    }
 
 }

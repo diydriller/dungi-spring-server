@@ -2,6 +2,7 @@ package com.project.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +41,9 @@ public class RedisConfig{
 //    @Value("${redis.sentinel.port3}")
 //    private int sentinelPort3;
 
+    @Autowired
     private final ObjectMapper objectMapper;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
 //        RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration();

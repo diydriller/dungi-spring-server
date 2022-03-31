@@ -1,7 +1,6 @@
 package com.project.api_server.infrastructure.user;
 
 import com.project.api_server.domain.user.service.UserStore;
-import com.project.api_server.perfomance.PerformanceLog;
 import com.project.common.error.BaseException;
 import com.project.common.model.User;
 import com.project.common.repository.UserRepository;
